@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GACHIAKUTA | Fan Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@700;800;900&amp;family=Inter:wght@400;700&amp;family=Space+Grotesk:wght@700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48
+    }
+    .trash-texture {
+        background-image: 
+            linear-gradient(rgba(19, 19, 19, 0.9), rgba(13, 13, 13, 0.9)),
+            url(https://lh3.googleusercontent.com/aida-public/AB6AXuACKtr3PI7FIljqoZAvhhoDUfH4u9WzsrTHx7kTUiFDCmNan8KFy_JUjp2BEXwaeuH1EyUNyn29grs_f7qFsjRBVtyrWDEjL5sCsYUahP0KiPMN8xolxcK8-pGJyaecqDhqZVc74Qh8EsuPoFUPfjPwY06wcpfj8bPT36I74MNLztmSGwP-hdNopruP0L5uqa88CmsPRtrOEFKHu7w5AP8MSHzW-bkB1TfIaKU9nyRvo-IYZgSAEtNq4g7jo70-bU9W2oldfcSR7u4a);
+        background-blend-mode: overlay;
+        background-attachment: fixed;
+    }
+    .grime-layer {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: -1;
+        opacity: 0.15;
+        background-image: radial-gradient(#8b0000 1px, transparent 1px);
+        background-size: 20px 20px;
+    }
+    .graffiti-accent {
+        position: absolute;
+        font-family: 'Epilogue', sans-serif;
+        font-weight: 900;
+        color: rgba(139, 0, 0, 0.15);
+        pointer-events: none;
+        text-transform: uppercase;
+        letter-spacing: -0.1em;
+    }
+    .halftone {
+        background-image: radial-gradient(#333 10%, transparent 11%);
+        background-size: 8px 8px
+    }
+    .clipped-panel {
+        clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)
+    }
+    .glitch-border {
+        box-shadow: 4px 4px 0 0 #8b0000, -2px -2px 0 0 #ffb4a8
+    }
+    .stencil-status {
+        background-color: #ffb4a8;
+        color: #690000;
+        clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%);
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 800;
+        padding: 4px 12px;
+        transform: rotate(-3deg);
+        box-shadow: 2px 2px 0px #8b0000;
+        border: 1px dashed #690000;
+    }
+    ::-webkit-scrollbar {
+        width: 8px
+    }
+    ::-webkit-scrollbar-track {
+        background: #131313
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #8b0000;
+        border: 2px solid #131313
+    }
+
+    @keyframes glitch-skew {
+        0% { transform: skew(0deg); }
+        20% { transform: skew(-5deg); }
+        24% { transform: skew(5deg); }
+        28% { transform: skew(0deg); }
+        100% { transform: skew(0deg); }
+    }
+    @keyframes flicker {
+        0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% { opacity: 1; }
+        20%, 21.999%, 63%, 63.999%, 65%, 69.999% { opacity: 0.4; }
+    }
+    @keyframes noise {
+        0% { transform: translate(0,0) }
+        10% { transform: translate(-5%,-5%) }
+        20% { transform: translate(-10%,5%) }
+        30% { transform: translate(5%,-10%) }
+        40% { transform: translate(-5%,15%) }
+        50% { transform: translate(-10%,5%) }
+        60% { transform: translate(15%,0) }
+        70% { transform: translate(0,10%) }
+        80% { transform: translate(-15%,0) }
+        90% { transform: translate(10%,5%) }
+        100% { transform: translate(5%,0) }
+    }
+    .glitch-text {
+        text-shadow: 2px 0 #ff0000, -2px 0 #ffffff;
+        animation: glitch-skew 4s infinite linear alternate-reverse;
+    }
+    .chromatic-aberration {
+        text-shadow: 1px 0 0 #ff0000, -1px 0 0 #ffffff;
+    }
+    .static-noise {
+        position: absolute; inset: 0; opacity: 0.05; pointer-events: none; z-index: 5;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+    .border-flicker {
+        animation: flicker 3s infinite;
+    }
+    .data-loss-bar {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 85% 100%, 85% 0%, 82% 0%, 82% 100%, 45% 100%, 45% 0%, 42% 0%, 42% 100%, 0% 100%);
+        animation: flicker 0.5s infinite;
+    }
+    .watermark-corrupted {
+        position: absolute; font-family: 'Space Grotesk', sans-serif; font-weight: 900; color: rgba(139, 0, 0, 0.05); font-size: 8rem; pointer-events: none; white-space: nowrap;
+    }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed-variant": "#920703",
+                        "primary-fixed": "#ffdad4",
+                        "on-surface-variant": "#e3beb8",
+                        "inverse-surface": "#e2e2e2",
+                        "inverse-on-surface": "#303030",
+                        "tertiary-fixed-dim": "#c8c6c6",
+                        "outline-variant": "#5a403c",
+                        "on-tertiary": "#303030",
+                        "primary-container": "#8b0000",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "on-primary-container": "#ff907f",
+                        "primary": "#ffb4a8",
+                        "surface": "#131313",
+                        "on-background": "#e2e2e2",
+                        "secondary-fixed": "#e2e2e2",
+                        "surface-container-lowest": "#0e0e0e",
+                        "surface-bright": "#393939",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "primary-fixed-dim": "#ffb4a8",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "secondary-container": "#454747",
+                        "surface-container": "#1f1f1f",
+                        "surface-container-high": "#2a2a2a",
+                        "on-secondary": "#2f3131",
+                        "on-tertiary-fixed": "#1b1c1c",
+                        "outline": "#aa8984",
+                        "tertiary-container": "#424242",
+                        "surface-container-low": "#1b1b1b",
+                        "tertiary-fixed": "#e4e2e1",
+                        "surface-variant": "#353535",
+                        "surface-tint": "#ffb4a8",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#353535",
+                        "error": "#ffb4ab",
+                        "on-primary-fixed": "#410000",
+                        "surface-dim": "#131313",
+                        "on-tertiary-container": "#b0aeae",
+                        "background": "#131313",
+                        "on-secondary-fixed-variant": "#454747",
+                        "on-secondary-container": "#b4b5b5",
+                        "on-surface": "#e2e2e2",
+                        "error-container": "#93000a",
+                        "secondary": "#c6c6c7",
+                        "on-primary": "#690000",
+                        "tertiary": "#c8c6c6",
+                        "on-error": "#690005",
+                        "inverse-primary": "#b52619"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "container-max": "1280px",
+                        "unit": "4px",
+                        "margin": "32px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Epilogue"],
+                        "headline-xl": ["Epilogue"],
+                        "label-bold": ["Space Grotesk"],
+                        "headline-md": ["Epilogue"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "160%", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "150%", "fontWeight": "400"}],
+                        "headline-lg": ["48px", {"lineHeight": "100%", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "headline-xl": ["84px", {"lineHeight": "90%", "letterSpacing": "-0.05em", "fontWeight": "900"}],
+                        "label-bold": ["14px", {"lineHeight": "100%", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "headline-md": ["32px", {"lineHeight": "110%", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden trash-texture relative">
+<div class="grime-layer"></div>
+<!-- Background Graffiti Elements -->
+<div class="graffiti-accent text-8xl -top-10 -left-10 rotate-12">TRASH</div>
+<div class="graffiti-accent text-9xl bottom-1/4 right-0 -rotate-90 opacity-10">JINKI</div>
+<div class="graffiti-accent text-7xl top-1/2 left-0 rotate-90 opacity-5">GIVER</div>
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter py-4 bg-surface/90 backdrop-blur-sm border-b-4 border-primary dark:border-primary-container shadow-[4px_4px_0px_0px_rgba(139,0,0,1)]">
+<div class="flex items-center gap-8">
+<span class="font-headline-lg text-headline-lg font-black text-primary dark:text-primary italic">GACHIAKUTA</span>
+<div class="hidden md:flex gap-6 items-center">
+<a class="font-headline-md text-headline-md uppercase tracking-tighter text-primary dark:text-primary font-black border-b-2 border-primary hover:-translate-y-1 hover:-translate-x-1 transition-transform duration-100 active:translate-y-0 active:translate-x-0" href="#">Manga</a>
+<a class="font-headline-md text-headline-md uppercase tracking-tighter text-on-surface dark:text-on-surface hover:text-primary-fixed hover:-translate-y-1 hover:-translate-x-1 transition-transform duration-100 active:translate-y-0 active:translate-x-0" href="#">Characters</a>
+<a class="font-headline-md text-headline-md uppercase tracking-tighter text-on-surface dark:text-on-surface hover:text-primary-fixed hover:-translate-y-1 hover:-translate-x-1 transition-transform duration-100 active:translate-y-0 active:translate-x-0" href="#">World</a>
+<a class="font-headline-md text-headline-md uppercase tracking-tighter text-on-surface dark:text-on-surface hover:text-primary-fixed hover:-translate-y-1 hover:-translate-x-1 transition-transform duration-100 active:translate-y-0 active:translate-x-0" href="#">Gear</a>
+</div>
+</div>
+<button class="bg-primary-container text-on-primary-container font-label-bold px-6 py-2 border-2 border-on-background hover:-translate-y-1 hover:-translate-x-1 transition-transform shadow-[4px_4px_0px_0px_#ffffff] active:translate-x-0 active:translate-y-0">
+            JOIN REBELLION
+        </button>
+</nav>
+<!-- Hero Section -->
+<header class="relative min-h-screen flex items-center justify-center pt-24 px-gutter overflow-hidden">
+<div class="absolute inset-0 z-0 opacity-60 mix-blend-overlay">
+<div class="absolute inset-0 halftone"></div>
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_0%,rgba(0,0,0,0.8)_100%)]"></div>
+</div>
+<div class="container-max w-full grid grid-cols-1 md:grid-cols-12 gap-8 items-center z-10">
+<div class="md:col-span-7 flex flex-col items-start gap-4 transform -rotate-1">
+<div class="bg-primary-container text-on-primary-container px-4 py-1 font-label-bold uppercase relative overflow-hidden">
+<div class="absolute inset-0 halftone opacity-30"></div>
+<span class="relative">System: Trash-Punk Activated</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl uppercase text-white drop-shadow-[8px_8px_0px_#8b0000]">
+                    CLEAN THE <br/> <span class="text-primary italic">WORLD</span>
+</h1>
+<p class="font-body-lg text-body-lg max-w-xl bg-surface/80 p-4 border-l-4 border-primary backdrop-blur-sm">
+                    Discarded by the "Heavens," surviving in the "Pit." Follow Rudo's descent into a world where trash is treasure and life is imbued in every piece of scrap.
+                </p>
+<div class="flex gap-4 mt-6">
+<button class="bg-white text-black font-label-bold text-lg px-8 py-4 border-2 border-primary shadow-[6px_6px_0px_0px_#8b0000] hover:-translate-y-1 hover:-translate-x-1 transition-all">START READING</button>
+<button class="bg-transparent text-white font-label-bold text-lg px-8 py-4 border-2 border-white hover:bg-white/10 transition-all">EXPLORE JINKI</button>
+</div>
+</div>
+<div class="md:col-span-5 relative group">
+<div class="absolute inset-0 bg-primary-container transform rotate-3 translate-x-4 translate-y-4 -z-10 opacity-50"></div>
+<div class="border-4 border-white p-2 bg-surface transform -rotate-2 relative overflow-hidden">
+<div class="absolute inset-0 halftone opacity-20 pointer-events-none"></div>
+<img alt="Rudo the protagonist" class="grayscale contrast-125 brightness-90 hover:grayscale-0 transition-all duration-700 w-full object-cover aspect-[3/4]" src="https://lh3.googleusercontent.com/aida/ADBb0uj5SiZLTLs1wGueODjbg035qmlD-_IOR0xzVwoXCIKj9i9HUXEGX0Vv1MqOgDuRDCuClOw74eO4Qtnm5ukjhz6Azt-p0erekmukl_BOvx1ja_IxXIAyVN4SxnQ1wxgRGlTx5Ogo7_Zgla1gov1AzN805exmK8kue2FN4Z0HFSwtZCzTMYQLjTro-s6EAVDyZjBen3yHd4dAgodrakBak8z0VkZLkKD3A4WuZK_j6sXFOS7KLUCqe4HBgz7xh5MSyWzdhcZLCL8LJTc"/>
+</div>
+<div class="absolute -bottom-4 -right-4 bg-primary text-black font-black px-6 py-2 uppercase transform rotate-6 border-2 border-black z-20">
+                    #001 RUDO
+                </div>
+</div>
+</div>
+</header>
+<!-- About Section: The Great Divide -->
+<section class="py-margin px-gutter bg-surface-container-low relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-8 bg-gradient-to-b from-background to-transparent opacity-50"></div>
+<div class="container-max mx-auto relative z-10">
+<h2 class="font-headline-lg text-headline-lg uppercase mb-12 text-center text-primary-fixed border-b-8 border-double border-outline-variant inline-block">The Great Divide</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-8">
+<!-- Sky Realm -->
+<div class="clipped-panel p-8 bg-white text-black relative group overflow-hidden border-2 border-black/10">
+<div class="absolute top-0 right-0 p-4 opacity-10 font-black text-6xl">UPPER</div>
+<h3 class="font-headline-md text-headline-md mb-4 uppercase tracking-tighter">The Sky Realm</h3>
+<p class="font-body-md text-body-md mb-6 relative z-10">
+                        A pristine utopia floating above the clouds. Here, everything is perfect, disposable, and heartless. Those who produce waste are revered, while the waste itself is cast into the abyss without a second thought.
+                    </p>
+<div class="border-2 border-black p-1 bg-white">
+<div class="h-48 bg-secondary-container flex items-center justify-center font-label-bold text-outline uppercase halftone">Utopian Grid Visualization</div>
+</div>
+</div>
+<!-- The Pit -->
+<div class="clipped-panel p-8 bg-primary-container text-white relative group overflow-hidden glitch-border">
+<div class="absolute top-0 right-0 p-4 opacity-10 font-black text-6xl">LOWER</div>
+<h3 class="font-headline-md text-headline-md mb-4 uppercase tracking-tighter">The Pit</h3>
+<p class="font-body-md text-body-md mb-6 relative z-10">
+                        The graveyard of the world. A sprawling industrial wasteland where survival depends on "Givers"—those who can manifest the latent souls within discarded objects. Life is hard, metal is heavy, and justice is rare.
+                    </p>
+<div class="border-2 border-white p-1 bg-black">
+<div class="h-48 bg-surface-container-highest flex items-center justify-center font-label-bold text-on-surface uppercase halftone">Wasteland Topography</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Characters Grid -->
+<section class="py-margin bg-background relative overflow-hidden">
+<div class="absolute -left-20 top-1/2 -translate-y-1/2 opacity-10 font-black text-[12rem] uppercase -rotate-90 pointer-events-none mix-blend-overlay">WATCHMAN</div>
+<div class="px-gutter container-max mx-auto mb-12 relative z-10">
+<div class="flex justify-between items-end">
+<div>
+<span class="text-primary font-label-bold uppercase tracking-widest bg-primary/10 px-2">The Rebels</span>
+<h2 class="font-headline-lg text-headline-lg uppercase">Engineers of Fate</h2>
+</div>
+<div class="hidden md:flex gap-2">
+<button class="p-2 border-2 border-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<button class="p-2 border-2 border-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<div class="flex overflow-x-auto gap-8 px-gutter pb-12 no-scrollbar snap-x relative z-10">
+<!-- Rudo Card -->
+<div class="min-w-[320px] md:min-w-[400px] snap-center group">
+<div class="bg-surface-container border-2 border-outline relative transition-transform duration-300 group-hover:scale-[1.02]">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary"></div>
+<div class="absolute top-4 right-4 z-20">
+<span class="stencil-status text-sm">ACTIVE</span>
+</div>
+<img alt="Rudo" class="w-full aspect-square object-cover grayscale group-hover:grayscale-0 transition-all duration-500" src="https://lh3.googleusercontent.com/aida/ADBb0uirgqgwjwuTbfMvNld-aIHBajxCvgFgcOZj_qnrd3Cg3yUgYXncftRWTgqdckJezMtmn4x4GOvSidjyO6L_rRxgUNM8N--6xybdPPa-J5JRfXQQZrJXyJLr-YRnF4luTThRaDhAlet8cZsLanTp30iCnGq8t13rRJIaf4SjkYMAOEJv5LZye9Ze_VYe3hLJ3TL6MFZ2fU1pzWQhF1Om24dcmiNxHYJ_XOISr30JVx3E0vJS6xAYir9phykvUHYAagS5HLKG7kpxeQ"/>
+<div class="p-6">
+<h4 class="font-headline-md text-headline-md uppercase">Rudo</h4>
+<span class="bg-white text-black px-2 py-0.5 font-label-bold text-xs uppercase mb-4 inline-block">The Trash Collector</span>
+<p class="font-body-md text-body-md text-on-surface-variant">Falsely accused of murder and thrown into the Pit, Rudo discovers his ability as a Giver—animating any object he values.</p>
+</div>
+</div>
+</div>
+<!-- Enjin Card -->
+<div class="min-w-[320px] md:min-w-[400px] snap-center group">
+<div class="bg-surface-container border-2 border-outline relative transition-transform duration-300 group-hover:scale-[1.02]">
+<div class="absolute top-0 left-0 w-full h-1 bg-white"></div>
+<div class="absolute top-4 right-4 z-20">
+<span class="stencil-status text-sm">DEPLOYED</span>
+</div>
+<img alt="Enjin" class="w-full aspect-square object-cover grayscale group-hover:grayscale-0 transition-all duration-500" src="https://lh3.googleusercontent.com/aida/ADBb0ugkYNnPxwuWHqPVBJcUIytI7ezKLBUacOF3wzWFu_QKps1wN_9BSwfIPnD03wgnnxSIVOFe3UivUuuLAvhCEh0oA6B26csPVJNp3QjOdOYTLzxigYihcIhoUL0VMZKQGp6dL4uKyO7iXOmN_JEqP7aPaxZZ-eDKWvkUmycPKF8Mk6FgV5YiguRddk8y3fs8ge-hcjcBtnZrJXNPWS0kjdqfeKPWiCQNKTRrn0DU3jcWmWUDI3aJmnTpqQuic65KpEfch0aHAO1-y-4"/>
+<div class="p-6">
+<h4 class="font-headline-md text-headline-md uppercase">Enjin</h4>
+<span class="bg-primary text-on-primary-container px-2 py-0.5 font-label-bold text-xs uppercase mb-4 inline-block">Janitor Squad Leader</span>
+<p class="font-body-md text-body-md text-on-surface-variant">A powerful Giver who wields an umbrella Jinki. He rescues Rudo and introduces him to the Janitors' mission.</p>
+</div>
+</div>
+</div>
+<!-- Watchman Series -->
+<div class="min-w-[320px] md:min-w-[400px] snap-center group">
+<div class="bg-primary-container border-2 border-white relative transition-transform duration-300 group-hover:scale-[1.02] shadow-[8px_8px_0px_0px_#131313]">
+<div class="h-[400px] flex flex-col items-center justify-center p-8 halftone text-center relative overflow-hidden">
+<div class="absolute top-4 right-4 z-20">
+<span class="stencil-status text-sm !bg-white !text-primary-container border-white">RESTRICTED</span>
+</div>
+<span class="material-symbols-outlined text-8xl mb-4" style="font-variation-settings: 'FILL' 1;">security</span>
+<h4 class="font-headline-md text-headline-md uppercase text-white">Watchman Series</h4>
+<p class="font-body-md text-body-md mt-4">The ultimate Jinki weapons created through decades of refined soul-infusion. Their power is legendary and terrifying.</p>
+<button class="mt-8 border-2 border-white px-6 py-2 font-label-bold uppercase hover:bg-white hover:text-black transition-colors">Classified Files</button>
+</div>
+</div>
+</div>
+<!-- Zanka Nijiku Card -->
+<div class="min-w-[320px] md:min-w-[400px] snap-center group">
+<div class="bg-surface-container border-2 border-outline relative transition-transform duration-300 group-hover:scale-[1.02]">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary"></div>
+<div class="absolute top-4 right-4 z-20">
+<span class="stencil-status text-sm">ON MISSION</span>
+</div>
+<img alt="Zanka Nijiku" class="w-full aspect-square object-cover grayscale group-hover:grayscale-0 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwO9K3Zg5co6-D2DZ4amHJ0Sz843_nT35Fi5r4H-7TTVBqwHd6yM1q9G1E290dS7cImbGOszdlu-tW6y8zroxndwVXnCrlbyY0O7zS7Cm96uOiNrMlyedFsBMy32Vbvt4hwV3PHrgazvHCQ6-5MBv3KiqARHTtHFPMCKrw0SnC7laEisGWo1pEooX9UlgBG2D5raOG2h3FebOi71j3fZyktWoIw5RH4w9QVMYbPdAE281hNRu82sUyjSQ5Lj_TLQkHB8L6hDo7xjcM"/>
+<div class="p-6">
+<h4 class="font-headline-md text-headline-md uppercase">Zanka Nijiku</h4>
+<span class="bg-white text-black px-2 py-0.5 font-label-bold text-xs uppercase mb-4 inline-block">The Iron-Willed Spear</span>
+<p class="font-body-md text-body-md text-on-surface-variant">A cool and stoic warrior whose discipline is as sharp as his spear Jinki. He values strength and order in the chaotic world of the Pit.</p>
+</div>
+</div>
+</div>
+<!-- Riyu Card -->
+<div class="min-w-[320px] md:min-w-[400px] snap-center group">
+<div class="bg-surface-container border-2 border-outline relative transition-transform duration-300 group-hover:scale-[1.02]">
+<div class="absolute top-0 left-0 w-full h-1 bg-white"></div>
+<div class="absolute top-4 right-4 z-20">
+<span class="stencil-status text-sm">ACTIVE</span>
+</div>
+<img alt="Riyu" class="w-full aspect-square object-cover grayscale group-hover:grayscale-0 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYDRMLqh9U3hqZqqSuAxdlqcSeEuyBtsMl4l_sdJhaFCCIRHy291OqHIaDDXoJWph9z-V1S37dYYK4N_UHV9MFChDek4AOiRX4avt4aDVM1_1ODWFBNJIczAGJavFfoONCZOJZxWatVg8JPY2KaCeYG3EPbzV9-6_FEzObX9EbSbF5Vwtv9OVtx_BJ-sEMABP0UeHv_2kkFf_thmYNkmnda-l225Kixs8MW_5sGLpy5YyHG0HYqAOXWP5C1At6TtFLNRIFqPNdBfbk"/>
+<div class="p-6">
+<h4 class="font-headline-md text-headline-md uppercase">Riyu</h4>
+<span class="bg-primary text-on-primary-container px-2 py-0.5 font-label-bold text-xs uppercase mb-4 inline-block">Scissor Striker</span>
+<p class="font-body-md text-body-md text-on-surface-variant">Energetic and cheerful, Riyu cuts through danger with her massive scissors Jinki. Her optimism is a rare light in the darkness of the lower realm.</p>
+</div>
+</div>
+</div>
+</div>
+</section><section class="py-margin px-gutter bg-surface-dim relative overflow-hidden border-t-4 border-primary-container">
+<div class="absolute inset-0 halftone opacity-30 pointer-events-none"></div>
+<div class="container-max mx-auto relative z-10"><div class="watermark-corrupted top-20 -left-40 -rotate-12">DATA_CORRUPTED</div><div class="watermark-corrupted bottom-20 -right-40 rotate-12">SYSTEM_ERROR</div>
+<div class="mb-12 border-l-8 border-primary-container pl-6">
+<span class="font-label-bold text-primary uppercase tracking-[0.3em] text-xs glitch-text">Classified Database // Access Level: Restricted</span>
+<h2 class="font-headline-lg text-headline-lg uppercase text-white mt-2 chromatic-aberration">The Watchman Series</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Card 1: Gloves of the Damned -->
+<div class="bg-surface-container-low border-2 border-primary-container/30 relative p-6 group hover:border-primary transition-colors border-flicker"><div class="static-noise"></div>
+<div class="absolute top-0 right-0 bg-primary-container text-on-primary-container px-3 py-1 font-label-bold text-[10px] uppercase">
+                    Weapon Class: Restricted
+                </div>
+<div class="aspect-video bg-black/40 border border-outline-variant mb-6 flex items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 halftone opacity-20"></div>
+<span class="material-symbols-outlined text-6xl text-primary/40 chromatic-aberration">back_hand</span>
+<div class="absolute bottom-2 left-2 font-label-bold text-[10px] text-primary/60 uppercase">Tactical_Scan_001.jpg</div>
+</div>
+<h3 class="font-headline-md text-2xl uppercase mb-2 text-white chromatic-aberration">Gloves of the Damned</h3>
+<div class="flex items-center gap-4 mb-4 font-label-bold text-xs">
+<span class="text-primary">SOUL SYNC:</span>
+<div class="flex-1 h-2 bg-surface-container-highest">
+<div class="h-full bg-primary data-loss-bar" style="width: 88%"></div>
+</div>
+<span class="text-white">88%</span>
+</div>
+<p class="font-body-md text-sm text-on-surface-variant leading-relaxed">
+                    Experimental gauntlets that allow the user to manifest physical force from perceived value. High risk of mental contamination if used beyond safety limits.
+                </p>
+<div class="mt-6 pt-4 border-t border-dashed border-outline-variant flex justify-between">
+<span class="font-label-bold text-[10px] text-primary uppercase translate-x-1 -translate-y-0.5 opacity-80">Status: Active</span>
+<span class="font-label-bold text-[10px] text-outline uppercase -translate-x-1 translate-y-0.5 opacity-80">Ref: R-01</span>
+</div>
+</div>
+<!-- Card 2: Umbrella Jinki -->
+<div class="bg-surface-container-low border-2 border-primary-container/30 relative p-6 group hover:border-primary transition-colors border-flicker"><div class="static-noise"></div>
+<div class="absolute top-0 right-0 bg-secondary-container text-on-secondary-container px-3 py-1 font-label-bold text-[10px] uppercase">
+                    Weapon Class: Combat Ready
+                </div>
+<div class="aspect-video bg-black/40 border border-outline-variant mb-6 flex items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 halftone opacity-20"></div>
+<span class="material-symbols-outlined text-6xl text-primary/40 chromatic-aberration">umbrella</span>
+<div class="absolute bottom-2 left-2 font-label-bold text-[10px] text-primary/60 uppercase">Tactical_Scan_042.jpg</div>
+</div>
+<h3 class="font-headline-md text-2xl uppercase mb-2 text-white chromatic-aberration">Janitor's Shelter</h3>
+<div class="flex items-center gap-4 mb-4 font-label-bold text-xs">
+<span class="text-primary">SOUL SYNC:</span>
+<div class="flex-1 h-2 bg-surface-container-highest">
+<div class="h-full bg-primary data-loss-bar" style="width: 94%"></div>
+</div>
+<span class="text-white">94%</span>
+</div>
+<p class="font-body-md text-sm text-on-surface-variant leading-relaxed">
+                    A multi-purpose defensive and offensive tool used by Janitor squad leaders. Capable of generating high-density kinetic barriers.
+                </p>
+<div class="mt-6 pt-4 border-t border-dashed border-outline-variant flex justify-between">
+<span class="font-label-bold text-[10px] text-primary uppercase translate-x-1 -translate-y-0.5 opacity-80">Status: Deployed</span>
+<span class="font-label-bold text-[10px] text-outline uppercase -translate-x-1 translate-y-0.5 opacity-80">Ref: E-42</span>
+</div>
+</div>
+<!-- Card 3: Iron-Willed Spear -->
+<div class="bg-surface-container-low border-2 border-primary-container/30 relative p-6 group hover:border-primary transition-colors border-flicker"><div class="static-noise"></div>
+<div class="absolute top-0 right-0 bg-primary-container text-on-primary-container px-3 py-1 font-label-bold text-[10px] uppercase">
+                    Weapon Class: Prototype
+                </div>
+<div class="aspect-video bg-black/40 border border-outline-variant mb-6 flex items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 halftone opacity-20"></div>
+<span class="material-symbols-outlined text-6xl text-primary/40 chromatic-aberration">architecture</span>
+<div class="absolute bottom-2 left-2 font-label-bold text-[10px] text-primary/60 uppercase">Tactical_Scan_089.jpg</div>
+</div>
+<h3 class="font-headline-md text-2xl uppercase mb-2 text-white chromatic-aberration">Iron-Willed Spear</h3>
+<div class="flex items-center gap-4 mb-4 font-label-bold text-xs">
+<span class="text-primary">SOUL SYNC:</span>
+<div class="flex-1 h-2 bg-surface-container-highest">
+<div class="h-full bg-primary data-loss-bar" style="width: 76%"></div>
+</div>
+<span class="text-white">76%</span>
+</div>
+<p class="font-body-md text-sm text-on-surface-variant leading-relaxed">
+                    Focused piercing weapon that draws on the user's discipline. High precision requirements limit its effective user pool.
+                </p>
+<div class="mt-6 pt-4 border-t border-dashed border-outline-variant flex justify-between">
+<span class="font-label-bold text-[10px] text-primary uppercase translate-x-1 -translate-y-0.5 opacity-80">Status: Testing</span>
+<span class="font-label-bold text-[10px] text-outline uppercase -translate-x-1 translate-y-0.5 opacity-80">Ref: Z-89</span>
+</div>
+</div>
+</div>
+<div class="mt-12 p-4 bg-primary-container/10 border-l-4 border-primary text-[10px] font-label-bold text-on-surface-variant uppercase tracking-widest">
+            Warning: Unauthorized access to Watchman Series data is punishable by immediate disposal into the Pit.
+        </div>
+</div>
+</section>
+<!-- World/Gear Feature -->
+<section class="py-margin px-gutter bg-surface-container-highest border-y-8 border-double border-outline-variant relative overflow-hidden">
+<div class="absolute inset-0 halftone opacity-20 pointer-events-none"></div>
+<div class="container-max mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+<div class="relative">
+<div class="absolute -top-10 -left-10 w-32 h-32 border-l-8 border-t-8 border-primary opacity-50"></div>
+<div class="bg-black p-8 border-2 border-white transform rotate-1 shadow-[12px_12px_0px_0px_#8b0000]">
+<div class="flex justify-between items-start mb-8">
+<h3 class="font-headline-md text-headline-md uppercase text-primary">Jinki Analysis</h3>
+<span class="font-label-bold text-outline-variant uppercase">Model: Gloves of the Damned</span>
+</div>
+<div class="space-y-6">
+<div class="flex gap-4 items-center">
+<div class="w-12 h-12 bg-primary-container rounded-full flex items-center justify-center font-black border border-white/20">01</div>
+<div>
+<p class="font-label-bold uppercase text-white">Soul Connection</p>
+<p class="text-xs text-on-surface-variant">Synchronization rate must exceed 85% for activation.</p>
+</div>
+</div>
+<div class="flex gap-4 items-center">
+<div class="w-12 h-12 bg-primary-container rounded-full flex items-center justify-center font-black border border-white/20">02</div>
+<div>
+<p class="font-label-bold uppercase text-white">Physical manifestation</p>
+<p class="text-xs text-on-surface-variant">The object's physical properties are amplified by user's willpower.</p>
+</div>
+</div>
+<div class="flex gap-4 items-center">
+<div class="w-12 h-12 bg-primary-container rounded-full flex items-center justify-center font-black border border-white/20">03</div>
+<div>
+<p class="font-label-bold uppercase text-white">Corruption Risk</p>
+<p class="text-xs text-on-surface-variant">Overuse leads to permanent mental fracture from the object's history.</p>
+</div>
+</div>
+</div>
+<div class="mt-12 pt-8 border-t border-dashed border-outline-variant">
+<div class="h-2 bg-outline-variant w-full overflow-hidden">
+<div class="h-full bg-primary w-2/3"></div>
+</div>
+<p class="text-[10px] uppercase mt-2 text-outline-variant">System integrity: 67% and falling...</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-6">
+<h2 class="font-headline-xl text-headline-xl uppercase tracking-tighter">Tools of the <br/><span class="italic text-primary">Unwanted</span></h2>
+<p class="font-body-lg text-body-lg">In Gachiakuta, objects aren't just things—they are repositories of human emotion. When a "Giver" pours their spirit into an item they cherish, it transforms into a Jinki: a living weapon of immense power.</p>
+<div class="grid grid-cols-2 gap-4 mt-4">
+<div class="p-4 bg-surface border-l-4 border-primary">
+<span class="material-symbols-outlined text-primary mb-2">settings_input_component</span>
+<p class="font-label-bold uppercase text-sm">Industrial Design</p>
+<p class="text-xs opacity-60">Scrap metal components and salvaged gear.</p>
+</div>
+<div class="p-4 bg-surface border-l-4 border-primary">
+<span class="material-symbols-outlined text-primary mb-2">auto_fix_high</span>
+<p class="font-label-bold uppercase text-sm">Vital Essence</p>
+<p class="text-xs opacity-60">Animated by the user's life force.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer / CTA -->
+<footer class="w-full py-margin px-gutter flex flex-col md:flex-row justify-between items-center gap-4 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] border-t-8 border-double border-outline-variant bg-surface-container-lowest relative overflow-hidden">
+<div class="absolute inset-0 halftone opacity-10 pointer-events-none"></div>
+<div class="flex flex-col items-center md:items-start gap-4 relative z-10">
+<span class="font-headline-md text-headline-md text-on-surface font-black uppercase">JOIN THE REBELLION</span>
+<div class="flex gap-4">
+<a class="w-12 h-12 border-2 border-primary flex items-center justify-center hover:bg-primary transition-colors hover:skew-x-2" href="#">
+<span class="material-symbols-outlined">alternate_email</span>
+</a>
+<a class="w-12 h-12 border-2 border-primary flex items-center justify-center hover:bg-primary transition-colors hover:skew-x-2" href="#">
+<span class="material-symbols-outlined">forum</span>
+</a>
+<a class="w-12 h-12 border-2 border-primary flex items-center justify-center hover:bg-primary transition-colors hover:skew-x-2" href="#">
+<span class="material-symbols-outlined">share</span>
+</a>
+</div>
+</div>
+<div class="flex flex-col items-center md:items-end gap-6 relative z-10">
+<div class="flex gap-8">
+<a class="font-label-bold text-label-bold uppercase text-on-surface-variant hover:text-primary transition-all" href="#">Privacy Policy</a>
+<a class="font-label-bold text-label-bold uppercase text-on-surface-variant hover:text-primary transition-all" href="#">Terms of Service</a>
+<a class="font-label-bold text-label-bold uppercase text-on-surface-variant hover:text-primary transition-all" href="#">Contact HQ</a>
+<a class="font-label-bold text-label-bold uppercase text-on-surface-variant hover:text-primary transition-all" href="#">Archives</a>
+</div>
+<p class="font-label-bold text-label-bold uppercase text-primary text-center md:text-right">
+                © 2024 ENGINE STUDIOS / KODANSHA. CLEAN THE WORLD.
+            </p>
+</div>
+</footer>
+<!-- Floating Action Button (FAB) -->
+<button class="fixed bottom-8 right-8 z-50 w-16 h-16 bg-primary-container text-on-primary-container border-2 border-white shadow-[4px_4px_0px_0px_#000] flex items-center justify-center hover:-translate-y-2 transition-transform">
+<span class="material-symbols-outlined text-4xl" data-weight="fill">add_shopping_cart</span>
+</button>
+</body></html>
