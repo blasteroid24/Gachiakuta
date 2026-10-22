@@ -40,14 +40,16 @@ export function Cast() {
                   <img
                     alt=""
                     aria-hidden
-                    className="cast-img absolute top-0 -left-[8%] w-[116%] max-w-none h-full object-cover object-top grayscale"
+                    className="cast-img absolute top-0 -left-[8%] w-[116%] max-w-none h-full object-cover grayscale"
+                    style={{ objectPosition: c.focus }}
                     src={charImage(c.slug)}
                     loading="lazy"
                     decoding="async"
                   />
                   <img
                     alt={c.name}
-                    className="cast-img absolute top-0 -left-[8%] w-[116%] max-w-none h-full object-cover object-top opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                    className="cast-img absolute top-0 -left-[8%] w-[116%] max-w-none h-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                    style={{ objectPosition: c.focus }}
                     src={charImage(c.slug)}
                     loading="lazy"
                     decoding="async"

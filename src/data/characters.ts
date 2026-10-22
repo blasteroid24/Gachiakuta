@@ -89,6 +89,8 @@ export type FeaturedCharacter = {
   title: string
   blurb: string
   accent: 'primary' | 'white'
+  /** CSS object-position: these are full-length portraits, so frame the face. */
+  focus: string
 }
 
 export const featuredCharacters: FeaturedCharacter[] = [
@@ -99,6 +101,7 @@ export const featuredCharacters: FeaturedCharacter[] = [
     title: 'The Trash Collector',
     blurb: 'Falsely accused of murder and thrown into the Pit, Rudo discovers his ability as a Giver—animating any object he values.',
     accent: 'primary',
+    focus: 'center 12%',
   },
   {
     name: 'Enjin',
@@ -107,6 +110,7 @@ export const featuredCharacters: FeaturedCharacter[] = [
     title: 'Janitor Squad Leader',
     blurb: 'A veteran Giver who wields Umbreaker, a sword-umbrella Jinki. He rescues Rudo and introduces him to the Cleaners.',
     accent: 'white',
+    focus: 'center 45%',
   },
   {
     name: 'Zanka Nijiku',
@@ -115,6 +119,7 @@ export const featuredCharacters: FeaturedCharacter[] = [
     title: 'The Iron-Willed Spear',
     blurb: 'A former Hell Guard trainee whose Lovely Assistaff turns a simple stick into a high-density spear.',
     accent: 'primary',
+    focus: 'center 40%',
   },
   {
     name: 'Riyo',
@@ -123,5 +128,6 @@ export const featuredCharacters: FeaturedCharacter[] = [
     title: 'The Ripper',
     blurb: 'A former hitman who lives for high-stakes combat, swinging massive scissors that can also fire projectiles.',
     accent: 'white',
+    focus: 'center 38%',
   },
 ]
