@@ -59,7 +59,7 @@ export function Watchman({ renderViewer }: Props) {
               Tactical_Scan_{item.ref}.obj
             </div>
           </div>
-          <div className="lg:col-span-2 p-6 md:p-8 flex flex-col gap-4 relative">
+          <div key={item.kind} className="swap-in lg:col-span-2 p-6 md:p-8 flex flex-col gap-4 relative">
             <div className="static-noise" />
             <div className="flex items-center gap-3">
               <ActiveIcon className="w-8 h-8 text-primary" strokeWidth={1.75} />
@@ -67,7 +67,7 @@ export function Watchman({ renderViewer }: Props) {
                 Class: {item.weaponClass}
               </span>
             </div>
-            <h3 key={item.name} className="feature-name font-headline-md uppercase text-white chromatic-aberration">{item.name}</h3>
+            <h3 className="feature-name font-headline-md uppercase text-white chromatic-aberration">{item.name}</h3>
             <dl className="grid grid-cols-2 gap-3 font-label-bold text-xs uppercase">
               <div className="border border-outline-variant p-3">
                 <dt className="text-outline">Wielder</dt>
@@ -81,7 +81,7 @@ export function Watchman({ renderViewer }: Props) {
             <div className="flex items-center gap-4 font-label-bold text-xs">
               <span className="text-primary">SOUL SYNC:</span>
               <div className="flex-1 h-2 bg-surface-container-highest">
-                <div className="sync-bar h-full bg-primary data-loss-bar transition-[width] duration-700 ease-out" style={{ width: `${item.sync}%` }} />
+                <div className="sync-bar h-full bg-primary data-loss-bar origin-left" style={{ width: `${item.sync}%` }} />
               </div>
               <span className="text-white tabular-nums">{item.sync}%</span>
             </div>

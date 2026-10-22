@@ -40,14 +40,14 @@ export function Cast() {
                   <img
                     alt=""
                     aria-hidden
-                    className="cast-img absolute inset-0 w-full h-[115%] object-cover object-top grayscale"
+                    className="cast-img absolute top-0 -left-[8%] w-[116%] max-w-none h-full object-cover object-top grayscale"
                     src={charImage(c.slug)}
                     loading="lazy"
                     decoding="async"
                   />
                   <img
                     alt={c.name}
-                    className="cast-img absolute inset-0 w-full h-[115%] object-cover object-top opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                    className="cast-img absolute top-0 -left-[8%] w-[116%] max-w-none h-full object-cover object-top opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                     src={charImage(c.slug)}
                     loading="lazy"
                     decoding="async"
@@ -82,6 +82,7 @@ export function Cast() {
                 </p>
                 <Link
                   to="/characters"
+                  viewTransition
                   className="magnetic mt-8 border-2 border-white text-white px-6 py-2 font-label-bold uppercase hover:bg-white hover:text-black transition-colors"
                 >
                   Explore Others

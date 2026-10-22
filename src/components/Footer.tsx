@@ -19,7 +19,7 @@ export function Footer() {
           <div className="flex gap-6 font-label-bold text-xs uppercase">
             <Link to="/#divide" className="hover:text-primary transition-colors">World</Link>
             <Link to="/#watchman" className="hover:text-primary transition-colors">Watchman</Link>
-            <Link to="/characters" className="hover:text-primary transition-colors">Characters</Link>
+            <Link to="/characters" viewTransition className="hover:text-primary transition-colors">Characters</Link>
           </div>
           <p className="font-label-bold text-xs uppercase text-primary text-center md:text-right">
             © {new Date().getFullYear()} Fan site · Gachiakuta © Kei Urana / Kodansha

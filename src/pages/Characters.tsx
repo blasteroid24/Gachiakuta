@@ -1,9 +1,39 @@
 import { useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { characterGroups, charImage } from '@/data/characters'
 import { Footer } from '@/components/Footer'
+import { gsap, MQ, ScrollTrigger, revealHeading, useGSAP } from '@/lib/gsap'
+import { attachTilt } from '@/lib/tilt'
 
 export default function Characters() {
   const containerRef = useRef<HTMLDivElement>(null)
+
+  useGSAP(
+    () => {
+      const root = containerRef.current!
+      const q = gsap.utils.selector(root)
+      const mm = gsap.matchMedia()
+
+      mm.add(MQ.motion, () => {
+        gsap.from('.chars-tag', { clipPath: 'inset(0 100% 0 0)', duration: 0.7, ease: 'expo.inOut' })
+        revealHeading(q('.chars-title')[0], { trigger: false, delay: 0.2 })
+        q('.category-title').forEach((el) => revealHeading(el, { type: 'words' }))
+
+        // Cards reveal in batches as they scroll in, so cards far down aren't already done animating.
+        gsap.set('.char-card', { autoAlpha: 0, y: 60, rotate: 2 })
+        ScrollTrigger.batch('.char-card', {
+          start: 'top 92%',
+          once: true,
+          onEnter: (batch) => gsap.to(batch, { autoAlpha: 1, y: 0, rotate: 0, duration: 0.8, ease: 'expo.out', stagger: 0.07 }),
+        })
+      })
+
+      mm.add(MQ.finePointer, () => attachTilt(root, '.char-card-inner', 10))
+
+      return () => mm.revert()
+    },
+    { scope: containerRef },
+  )
 
   return (
     <div ref={containerRef} className="bg-background text-on-background min-h-screen font-body-md overflow-x-clip trash-texture relative pt-28">
@@ -19,13 +49,13 @@ export default function Characters() {
         </h1>
         <nav className="flex flex-wrap justify-center gap-2 mt-8" aria-label="Character groups">
           {characterGroups.map((g) => (
-            <a
+            <Link
               key={g.id}
-              href={`#${g.id}`}
+              to={{ hash: g.id }}
               className="font-label-bold text-[11px] uppercase text-white border border-outline-variant px-3 py-1.5 hover:border-primary hover:text-primary transition-colors"
             >
               {g.title.replace("Cleaners' ", '')}
-            </a>
+            </Link>
           ))}
         </nav>
       </header>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
+import { useLenis } from '@/lib/lenis-context'
 
 const links = [
   { to: '/#divide', label: 'World' },
@@ -12,14 +13,17 @@ const links = [
 export function Nav() {
   const [open, setOpen] = useState(false)
   const { pathname, hash } = useLocation()
+  const lenis = useLenis()
 
   useEffect(() => {
     document.documentElement.style.overflow = open ? 'hidden' : ''
-  }, [open])
+    if (open) lenis?.stop()
+    else lenis?.start()
+  }, [open, lenis])
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter md:px-8 py-3 md:py-4 bg-surface/90 border-b-4 border-primary-container shadow-[4px_4px_0px_0px_rgba(139,0,0,1)]">
-      <Link to="/" className="font-headline-lg !text-[28px] md:!text-[36px] font-black text-primary italic no-underline relative z-10">
+    <nav style={{ viewTransitionName: 'site-nav' }} className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter md:px-8 py-3 md:py-4 bg-surface/90 border-b-4 border-primary-container shadow-[4px_4px_0px_0px_rgba(139,0,0,1)]">
+      <Link to="/" viewTransition={pathname !== '/'} className="magnetic font-headline-lg !text-[28px] md:!text-[36px] font-black text-primary italic no-underline relative z-10">
         GACHIAKUTA
       </Link>
 
@@ -28,6 +32,7 @@ export function Nav() {
           <Link
             key={l.to}
             to={l.to}
+            viewTransition={pathname !== '/'}
             className={cn(
               'nav-link font-label-bold uppercase text-on-surface hover:text-primary transition-colors',
               pathname === '/' && hash === l.to.slice(1) && 'text-primary',
@@ -38,6 +43,7 @@ export function Nav() {
         ))}
         <NavLink
           to="/characters"
+          viewTransition
           className={({ isActive }) => cn('nav-link font-label-bold uppercase hover:text-primary transition-colors', isActive ? 'text-primary' : 'text-on-surface')}
         >
           All Characters
@@ -46,7 +52,8 @@ export function Nav() {
 
       <Link
         to={pathname === '/characters' ? '/' : '/characters'}
-        className="hidden md:inline-block bg-primary-container text-on-primary-container font-label-bold px-5 py-2 border-2 border-on-background shadow-[4px_4px_0px_0px_#ffffff] transition-transform duration-150 hover:-translate-x-1 hover:-translate-y-1"
+        viewTransition
+        className="magnetic hidden md:inline-block bg-primary-container text-on-primary-container font-label-bold px-5 py-2 border-2 border-on-background shadow-[4px_4px_0px_0px_#ffffff] transition-transform duration-150 hover:-translate-x-1 hover:-translate-y-1"
       >
         {pathname === '/characters' ? 'BACK TO MISSION' : 'JOIN REBELLION'}
       </Link>
@@ -73,6 +80,7 @@ export function Nav() {
           <Link
             key={l.to}
             to={l.to}
+            viewTransition={!(pathname === '/' && l.to.startsWith('/#'))}
             onClick={() => setOpen(false)}
             className={cn(
               'relative font-headline-lg uppercase text-white hover:text-primary transition-[transform,opacity] duration-500',
