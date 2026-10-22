@@ -6,7 +6,7 @@ const loadHeroScene = () => import('@/three/heroScene')
 export function Hero() {
   return (
     <header id="top" className="hero-section relative min-h-[100svh] flex items-center justify-center pt-28 pb-16 px-gutter md:px-8 overflow-hidden">
-      <ThreeCanvas eager load={loadHeroScene} className="hero-3d absolute inset-0 z-0 pointer-events-none" />
+      <ThreeCanvas eager minWidth={768} load={loadHeroScene} className="hero-3d absolute inset-0 z-0 pointer-events-none" />
       <div className="hero-bg absolute inset-0 z-0 opacity-60 mix-blend-overlay pointer-events-none">
         <div className="absolute inset-0 halftone" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_0%,rgba(0,0,0,0.8)_100%)]" />

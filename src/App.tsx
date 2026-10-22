@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Nav } from '@/components/Nav'
 import { Cursor } from '@/components/Cursor'
+import { Loader } from '@/components/Loader'
 import { SmoothScroll } from '@/components/SmoothScroll'
 import Home from '@/pages/Home'
 
@@ -17,6 +18,7 @@ export default function App() {
 
   return (
     <SmoothScroll>
+      <Loader />
       <Cursor />
       <Nav />
       <Suspense fallback={<div className="min-h-screen bg-background" />}>

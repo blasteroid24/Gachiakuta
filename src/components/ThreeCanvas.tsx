@@ -13,6 +13,8 @@ type Props = {
   props?: Record<string, string | number | boolean>
   /** Start loading right after first paint instead of waiting until the canvas nears the viewport. */
   eager?: boolean
+  /** Skip the scene entirely (keep the fallback) on viewports narrower than this. */
+  minWidth?: number
 }
 
 function detectQuality(): Quality {
@@ -27,7 +29,7 @@ const whenIdle = () =>
     else setTimeout(resolve, 200)
   })
 
-export function ThreeCanvas({ load, className, fallback, props, eager = false }: Props) {
+export function ThreeCanvas({ load, className, fallback, props, eager = false, minWidth = 0 }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const sceneRef = useRef<SceneInstance | null>(null)
@@ -45,6 +47,7 @@ export function ThreeCanvas({ load, className, fallback, props, eager = false }:
   }, [propsKey])
 
   useEffect(() => {
+    if (window.innerWidth < minWidth) return
     const wrap = wrapRef.current!
     const canvas = canvasRef.current!
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -159,7 +162,7 @@ export function ThreeCanvas({ load, className, fallback, props, eager = false }:
       io.disconnect()
       cleanup.fn?.()
     }
-  }, [eager])
+  }, [eager, minWidth])
 
   return (
     <div ref={wrapRef} className={cn('relative overflow-hidden', className)}>

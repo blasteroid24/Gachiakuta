@@ -1,6 +1,7 @@
 import type { RefObject } from 'react'
 import { gsap, MQ, ScrollTrigger, revealHeading, useGSAP } from '@/lib/gsap'
 import { attachTilt } from '@/lib/tilt'
+import { onIntroDone } from '@/lib/intro'
 
 /**
  * All scroll/intro choreography for the home page. Everything lives in one
@@ -14,15 +15,20 @@ export function useHomeAnimations(scope: RefObject<HTMLElement | null>) {
       const q = gsap.utils.selector(root)
       const mm = gsap.matchMedia()
 
-      mm.add(MQ.motion, () => {
-        // ---- Hero intro
-        const intro = gsap.timeline({ delay: 0.1 })
-        intro
-          .from('.hero-tag', { clipPath: 'inset(0 100% 0 0)', duration: 0.7, ease: 'expo.inOut' })
-          .from('.hero-sub', { y: 30, autoAlpha: 0 }, 0.7)
-          .from('.hero-cta > *', { y: 24, autoAlpha: 0, stagger: 0.08 }, 0.85)
-          .from('.hero-card > *', { y: 120, rotate: (i) => [10, -8, 18][i] ?? 0, autoAlpha: 0, duration: 1.3, ease: 'expo.out', stagger: 0.12 }, 0.2)
-        q('.hero-line').forEach((el, i) => revealHeading(el, { trigger: false, delay: 0.25 + i * 0.15 }))
+      mm.add(MQ.motion, (ctx) => {
+        // ---- Hero intro, held until the loader curtain lifts
+        const stopWaiting = onIntroDone(() =>
+          ctx.add(() => {
+            gsap
+              .timeline({ delay: 0.05 })
+              .from('.hero-tag', { clipPath: 'inset(0 100% 0 0)', duration: 0.7, ease: 'expo.inOut' })
+              .from('.hero-sub', { y: 30, autoAlpha: 0 }, 0.7)
+              .from('.hero-cta > *', { y: 24, autoAlpha: 0, stagger: 0.08 }, 0.85)
+              // Transform-only (no opacity) so the hero image — the LCP element — paints on the first frame.
+              .from('.hero-card > *', { y: 120, rotate: (i) => [10, -8, 18][i] ?? 0, duration: 1.3, ease: 'expo.out', stagger: 0.12 }, 0.2)
+            revealHeading(q('.hero-title')[0], { trigger: false, delay: 0.25 })
+          }),
+        )
 
         // ---- Section headings
         q('.section-title').forEach((el) => revealHeading(el, { type: 'words' }))
@@ -81,6 +87,10 @@ export function useHomeAnimations(scope: RefObject<HTMLElement | null>) {
           ease: 'none',
           scrollTrigger: { trigger: '.footer-mark', start: 'top bottom', end: 'bottom top', scrub: true },
         })
+
+        return () => {
+          stopWaiting()
+        }
       })
 
       mm.add(MQ.desktop, () => {
@@ -124,10 +134,9 @@ export function useHomeAnimations(scope: RefObject<HTMLElement | null>) {
         })
 
         cards.forEach((card) => {
-          gsap.fromTo(card, { scale: 0.86, rotate: 4, autoAlpha: 0.35 }, {
+          gsap.fromTo(card, { scale: 0.86, rotate: 4 }, {
             scale: 1,
             rotate: 0,
-            autoAlpha: 1,
             ease: 'none',
             scrollTrigger: { trigger: card, containerAnimation: horizontal, start: 'left right', end: 'left 55%', scrub: true },
           })
